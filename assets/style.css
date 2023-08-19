@@ -1,0 +1,143 @@
+body,
+h1,
+h2,
+p,
+ul,
+li,
+video,
+input {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Set global font and background */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+/* Center content vertically */
+.container {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.live-page {
+  width: 100%;
+  display: flex;
+  min-height: 90vh;
+}
+
+/* Style the video container */
+.video-container {
+  position: relative;
+  width: 70%;
+  margin-right: 20px;
+}
+
+/* Style the video element */
+#publisher-stream-video {
+  width: 100%;
+  height: 75vh;
+}
+
+/* Style the video overlay */
+.video-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 10px;
+}
+
+.video-overlay h1,
+.video-overlay p {
+  margin: 5px 0;
+}
+
+/* Style the sidebar */
+.sidebar {
+  width: 30%;
+  background-color: #fff;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Style the chat container */
+.sidebar-container,
+.related-videos {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.sidebar-container h2,
+.related-videos h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+/* Style the chat messages */
+.chat-messages {
+  list-style-type: none;
+  padding-left: 0 !important;
+  margin-bottom: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.chat-messages li {
+  padding: 5px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+/* Style the related videos */
+.videos-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.videos-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.videos-list img {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.videos-list p {
+  font-size: 14px;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .video-container {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+}
