@@ -11,3 +11,4 @@ export default ({ app }) => {
   // Inject axios into the context as $axios
   app.$axios = axios;
 };
+

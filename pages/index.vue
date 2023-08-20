@@ -1,28 +1,28 @@
 <template>
-  <v-container fluid>
-    <v-row class="mt-5">
-      <v-col cols="12">
-        <form>
-          <v-text-field
-            v-model="state.channel"
-            label="room name"
-            required
-          ></v-text-field>
-          <v-btn class="me-4" color="info" @click="register"> register </v-btn>
-        </form>
-      </v-col>
-      <v-col cols="12" v-if="link_SUBSCRIBER">
+  <div class="container">
+    <div class="mt-5" style="margin-top: 100px">
+      <div>
+        <div class="input-group">
+          <input v-model="state.channel" label="room name" required />
+        </div>
+        <button class="me-4" color="info" @click="register">create room</button>
+      </div>
+      <div cols="12" v-if="link_SUBSCRIBER" style="margin-top: 10px">
         <div>
           <span>link SUBSCRIBER:</span>
-          <a target="_blank" :href="link_SUBSCRIBER">{{ link_SUBSCRIBER }}</a>
+          <nuxt-link :to="link_SUBSCRIBER" target="_blank">{{
+            link_SUBSCRIBER
+          }}</nuxt-link>
         </div>
         <div>
           <span> link PUBLISHER: </span>
-          <a target="_blank" :href="link_PUBLISHER">{{ link_PUBLISHER }}</a>
+          <nuxt-link :to="link_PUBLISHER" target="_blank">{{
+            link_PUBLISHER
+          }}</nuxt-link>
         </div>
-      </v-col>
-    </v-row>
-  </v-container>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import { v4 as uuidv4 } from "uuid";
@@ -48,12 +48,8 @@ export default {
 
     async register() {
       if (this.state.channel.trim() != "") {
-        this.link_PUBLISHER =
-          process.env.BASE_URL +
-          `/live/publisher?channel=${this.state.channel}&uid=${this.state.uid}`;
-        this.link_SUBSCRIBER =
-          process.env.BASE_URL +
-          `/live/subscriber?channel=${this.state.channel}&uid=${this.state.uid}`;
+        this.link_PUBLISHER = `/live/publisher?channel=${this.state.channel}`;
+        this.link_SUBSCRIBER = `/live/subscriber?channel=${this.state.channel}`;
       }
     },
   },

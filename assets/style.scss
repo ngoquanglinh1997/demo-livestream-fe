@@ -20,15 +20,17 @@ body {
 /* Center content vertically */
 .container {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   justify-content: center;
   min-height: 100vh;
+  padding: 5px;
 }
 
 .live-page {
   width: 100%;
   display: flex;
   min-height: 90vh;
+  padding: 5px;
 }
 
 /* Style the video container */
@@ -39,10 +41,17 @@ body {
 }
 
 /* Style the video element */
+#subscriber-stream-video {
+  width: 100%;
+  height: 75vh;
+}
+
+/* Style the video element */
 #publisher-stream-video {
   width: 100%;
   height: 75vh;
 }
+
 
 /* Style the video overlay */
 .video-overlay {
@@ -52,6 +61,7 @@ body {
   right: 0;
   background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
+  height: 35px;
   padding: 10px;
 }
 
@@ -62,7 +72,7 @@ body {
 
 /* Style the sidebar */
 .sidebar {
-  width: 30%;
+  width: 26%;
   background-color: #fff;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -91,7 +101,7 @@ body {
   list-style-type: none;
   padding-left: 0 !important;
   margin-bottom: 10px;
-  max-height: 300px;
+  max-height: 73vh;
   overflow-y: auto;
 }
 
@@ -102,7 +112,6 @@ body {
   margin-bottom: 5px;
 }
 
-/* Style the related videos */
 .videos-list {
   list-style-type: none;
   padding-left: 0;
@@ -125,19 +134,45 @@ body {
   font-size: 14px;
 }
 
-/* Responsive design for smaller screens */
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100%;
+}
 
-  .video-container {
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 20px;
-  }
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
 
-  .sidebar {
-    width: 100%;
-  }
+.input-group {
+  margin-bottom: 20px;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.j-center {
+  justify-content: center;
+}
+
+.j-around {
+  justify-content: space-around;
+}
+
+.j-between {
+  justify-content: space-between;
+}
+
+.error {
+  background-color: red !important;
 }

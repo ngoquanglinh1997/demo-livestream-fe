@@ -1,98 +1,122 @@
 <template>
   <div class="live-page">
-    <div class="video-container">
-      <video id="publisher-stream-video" controls></video>
-      <video id="remote-video" controls></video>
+    <div
+      class="video-container p-deliver-video-container"
+      id="p-deliver-video-container"
+    >
+      <video id="publisher-stream-video" ref="video" controls></video>
 
-      <h2>Your browser does not support the video tag.</h2>
+      <h2></h2>
       <div class="video-overlay">
-        <div class="d-flex justify-space-between align-center">
-          <div>
-            <v-btn color="info" size="x-large" class="video-btn" @click="start">
+        <div class="d-flex j-between">
+          <div class="d-flex j-around">
+            <button
+              color="info"
+              size="x-large"
+              class="video-btn"
+              @click="start"
+            >
               start
-            </v-btn>
-            <v-btn color="warning" size="x-large" class="video-btn">
-              pause
-            </v-btn>
+            </button>
           </div>
-
-          <v-btn color="error" size="x-large" class="video-btn"> stop </v-btn>
+          <button
+            color="error"
+            size="x-large"
+            class="video-btn error"
+            @click="stop"
+          >
+            stop
+          </button>
         </div>
       </div>
     </div>
     <div class="sidebar">
       <div class="sidebar-container">
-        <div>
+        <div style="height: 100%">
           <h2>Live Chat</h2>
           <ul class="chat-messages">
-            <li v-for="(message, index) in chatMessages" :key="index">
-              {{ message.text }}
+            <li v-for="(message, index) in messages" :key="index">
+              {{ message.message }}
             </li>
           </ul>
         </div>
         <div>
-          <v-text-field
-            label="send a message..."
-            variant="outlined"
-            :hide-details="true"
-            :autofocus="true"
-            :rows="2"
-          ></v-text-field>
+          <input
+            type="text"
+            v-model="message"
+            placeholder="message..."
+            @keyup.enter="submit"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import AgoraRTCManager from "~/plugins/agora.js";
+import { AgoraPublisher } from "~/plugins/agora.js";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   data() {
     return {
-      streamSource: "https://youtu.be/WdZgjWbsPLI",
-      chatMessages: [
-        { text: "User1: Hello, everyone!" },
-        { text: "User2: Hey there!" },
-        { text: "User3: How's it going?" },
-      ],
-      newMessage: "",
-      agora: null,
+      messages: [],
+      message: "",
+      client: null,
+      userId: uuidv4(),
     };
   },
-  async created() {
+  async mounted() {
     await this.fetchData();
+    this.socket = this.$nuxtSocket({
+      name: "main",
+    });
+
+    /* Listen for events: */
+    this.socket.on("send-message", (msg, cb) => {
+      if (msg.userId != this.userId) {
+        this.messages = [...this.messages, msg];
+      }
+    });
+  },
+  beforeDestroy() {
+    this.stop();
   },
   methods: {
     async fetchData() {
       try {
         const { query } = this.$nuxt.context.route;
-        if (!query.channel || !query.uid) {
+        if (!query.channel) {
           return;
         }
         const model = {
           channel: query.channel,
-          uid: query.uid,
+          uid: this.userId,
         };
-        const { data } = await this.$axios.post("/subscriber", model);
+        const { data } = await this.$axios.post("/live/publisher", model);
         await this.initAgora(data);
       } catch (error) {
         console.error("Error:", error);
       }
     },
-    sendMessage() {
-      if (this.newMessage.trim() !== "") {
-        this.chatMessages.push({ text: `You: ${this.newMessage}` });
-        this.newMessage = "";
-        this.$socket.emit("message", "Hello, Socket.io!");
-      }
-    },
+
     async initAgora(data) {
-      if (!this.agora) {
-        this.agora = new AgoraRTCManager(data);
-      }
+      //this.agora = new AgoraRTCManager(data);
+      this.client = new AgoraPublisher(data, this.$refs.video);
+      await this.client.listener();
     },
-    start() {
-      this.agora.start();
+    async start() {
+      await this.client.startPublisher();
+    },
+    stop() {
+      this.client.stop();
+    },
+    async submit() {
+      if (this.message) {
+        const model = { userId: this.userId, message: this.message };
+        const { data } = await this.$axios.post("/live/chat", model);
+        this.messages = [...this.messages, data];
+        this.message = "";
+      }
     },
   },
 };
